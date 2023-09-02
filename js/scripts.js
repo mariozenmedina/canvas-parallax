@@ -4,15 +4,26 @@ const animations = [
     {
         src: "./img/ipe.png",
         loaded: false,
-        opacity: .5,
         scrolls: {
             0: {
-                x: 0,
-                y: 0
+                x: 1000,
+                y: 800,
+                opacity: 1,
             },
-            200: {
+            2000: {
                 x: 200,
-                y: 100
+                y: 100,
+                opacity: .1,
+            },
+            4000: {
+                x: 0,
+                y: 0,
+                opacity: 1,
+            },
+            6000: {
+                x: 1200,
+                y: -100,
+                opacity: .5,
             },
         }
     },
@@ -22,11 +33,13 @@ const animations = [
         scrolls: {
             0: {
                 x: 100,
-                y: 100
+                y: 100,
+                opacity: 0,
             },
-            200: {
+            4000: {
                 x: 300,
-                y: 200
+                y: 200,
+                opacity: 1,
             },
         }
     },

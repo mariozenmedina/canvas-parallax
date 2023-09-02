@@ -63,8 +63,31 @@ class CanvasZen {
     }
 
     #drawImageByScroll(ctx, e) {
-        ctx.globalAlpha = e.opacity || 1;
-        ctx.drawImage(e.el, 0, 0, e.el.width, e.el.height);
+        
+        //Find bottom and upper keys
+        const scrollPos = window.scrollY;
+        let keys = Object.keys(e.scrolls);
+        keys = keys.map( k => parseInt(k) );
+
+        const lowerBound = keys.toReversed().find( k => k <= scrollPos);
+        const upperBound = keys.find( k => k >= scrollPos) || lowerBound;
+
+        let xPos, yPos;
+        //Set values
+        if(lowerBound == upperBound || upperBound == undefined) {
+            ctx.globalAlpha = e.scrolls[lowerBound].opacity ?? 1;
+            xPos = e.scrolls[lowerBound].x;
+            yPos = e.scrolls[lowerBound].y;
+        }
+        else {
+            const pct = (scrollPos - lowerBound) / (upperBound - lowerBound);
+            ctx.globalAlpha = e.scrolls[lowerBound].opacity + ( e.scrolls[upperBound].opacity - e.scrolls[lowerBound].opacity ) * pct;
+            xPos = e.scrolls[lowerBound].x + ( e.scrolls[upperBound].x - e.scrolls[lowerBound].x ) * pct;
+            yPos = e.scrolls[lowerBound].y + ( e.scrolls[upperBound].y - e.scrolls[lowerBound].y ) * pct;
+        }
+
+        ctx.drawImage(e.el, xPos, yPos, e.el.width, e.el.height);
+
     }
 
     #loading() {
