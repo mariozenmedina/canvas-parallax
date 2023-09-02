@@ -69,24 +69,30 @@ class CanvasZen {
         let keys = Object.keys(e.scrolls);
         keys = keys.map( k => parseInt(k) );
 
-        const lowerBound = keys.toReversed().find( k => e.scrolls[k].scroll() <= scrollPos);
-        const upperBound = keys.find( k => e.scrolls[k].scroll() >= scrollPos) || lowerBound;
+        const lowerBound = keys.toReversed().find( k => e.scrolls[k].scroll(e.el) <= scrollPos);
+        const upperBound = keys.find( k => e.scrolls[k].scroll(e.el) >= scrollPos) || lowerBound;
 
-        let xPos, yPos;
+        let xPos, yPos, width, height;
         //Set values
         if(lowerBound == upperBound || upperBound == undefined) {
-            ctx.globalAlpha = e.scrolls[lowerBound].opacity() ?? 1;
-            xPos = e.scrolls[lowerBound].x();
-            yPos = e.scrolls[lowerBound].y();
+            width = e.scrolls[lowerBound].width(e.el); e.el.canvasWidth = width;
+            height = e.scrolls[lowerBound].height(e.el); e.el.canvasHeight = height;
+            xPos = e.scrolls[lowerBound].x(e.el);
+            yPos = e.scrolls[lowerBound].y(e.el);
+            ctx.globalAlpha = e.scrolls[lowerBound].opacity(e.el) ?? 1;
         }
         else {
-            const pct = (scrollPos - e.scrolls[lowerBound].scroll()) / (e.scrolls[upperBound].scroll() - e.scrolls[lowerBound].scroll());
-            ctx.globalAlpha = e.scrolls[lowerBound].opacity() + ( e.scrolls[upperBound].opacity() - e.scrolls[lowerBound].opacity() ) * pct;
-            xPos = e.scrolls[lowerBound].x() + ( e.scrolls[upperBound].x() - e.scrolls[lowerBound].x() ) * pct;
-            yPos = e.scrolls[lowerBound].y() + ( e.scrolls[upperBound].y() - e.scrolls[lowerBound].y() ) * pct;
+            const pct = (scrollPos - e.scrolls[lowerBound].scroll(e.el)) / (e.scrolls[upperBound].scroll(e.el) - e.scrolls[lowerBound].scroll(e.el));
+            width = e.scrolls[lowerBound].width(e.el) + ( e.scrolls[upperBound].width(e.el) - e.scrolls[lowerBound].width(e.el) ) * pct;
+            e.el.canvasWidth = width;
+            height = e.scrolls[lowerBound].height(e.el) + ( e.scrolls[upperBound].height(e.el) - e.scrolls[lowerBound].height(e.el) ) * pct;
+            e.el.canvasHeight = height;
+            xPos = e.scrolls[lowerBound].x(e.el) + ( e.scrolls[upperBound].x(e.el) - e.scrolls[lowerBound].x(e.el) ) * pct;
+            yPos = e.scrolls[lowerBound].y(e.el) + ( e.scrolls[upperBound].y(e.el) - e.scrolls[lowerBound].y(e.el) ) * pct;
+            ctx.globalAlpha = e.scrolls[lowerBound].opacity(e.el) + ( e.scrolls[upperBound].opacity(e.el) - e.scrolls[lowerBound].opacity(e.el) ) * pct;
         }
 
-        ctx.drawImage(e.el, xPos, yPos, e.el.width, e.el.height);
+        ctx.drawImage(e.el, xPos, yPos, width, height);
 
     }
 
