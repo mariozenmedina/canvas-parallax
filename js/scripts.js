@@ -7,8 +7,8 @@ const animations = [
         scrolls: [
             {
                 scroll: (el) => 0,
-                x: (el) => 1000,
-                y: (el) => 800,
+                x: (el) => .8 * window.innerWidth,
+                y: (el) => .8 * window.innerHeight,
                 width: (el) => el.width,
                 height: (el) => el.height,
                 opacity: (el) => 1,
